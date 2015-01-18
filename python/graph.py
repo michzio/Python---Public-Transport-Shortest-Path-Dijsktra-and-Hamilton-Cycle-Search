@@ -78,10 +78,22 @@ class Graph:
 
 	def direct_edge(self, v1, v2): 
 		""" Metoda wyszukuje bezpośredniej krawędzi z v1 do v2. """
-		if self.graph[v1]: 
+		if v1 in self.graph: 
 			for edge in self.graph[v1]:
 				if edge.target() == v2:
 					return edge 
+		return None
+
+	def vertices(self):
+		for node in self.graph.keys():
+			yield node
+
+	def get_edges_from(self, v): 
+		return self.graph.get(v)
+
+	def get_neighbours(self, v): 
+		if v in self.graph: 
+			return [edge.target() for edge in self.graph[v]]
 		return None
 
 
