@@ -1,0 +1,17 @@
+8
+18
+Czerwone Maki, 2, Chmieleniec, 1, Kampus_UJ, 2, Ruczaj, 3, Norymberska, 2, Grota-Roweckiego, 2, Lipińskiego, 2, Kobierzyńska,3,Słomiana, 2, Kapelanka, 3, Szwedzka, 1, Most Grunwaldzki, 1, Oszeszkowej, 3, Stradom, 2, Wawel, 1, Św. Gertrudy, 1, Plac Wszystkich Świętych, 1, Filharmonia, 2, Teatr Bagatela, 2, Basztowa LOT, 1, Pędzichów, 1, Nowy Kleparz, 1, Dworzec Towarowy, 2, Prądnicka, 1, Bratysławska, 2, Krowodrza Górka
+164
+Piaski_Nowe, 2, Nowosadecka, 1, Wola Duchacka, 2, Zajezdnia Wola Duchacka, 3, Puszkarska, 3, Kamieńskiego Wiadukt, 2, Rondo Matecznego, 2, Os. Podwawelskie, 3, Most Grunwaldzki, 2,  Konopnickiej, 2, Jubilat, 1, Cracovia, 1, AGH, 3, Plac Inwalidów, 2, Grottgera, 2, Nowy Kleparz, 4, Bratysławska, 1, Szpital Narutowicza, 1, Lekarska, 1, Zdrowa, 3, Mackiewicza, 1, Clepardia, 1, Siewna Wiadukt, 2, Bociania, 2, Górka Narodowa
+50 
+Krowodrza Górka, 1, Bratysławska, 1, Prądnicka, 1, Dworzec Towarowy, 1, Politechnika, 1, Dworzec Główny, 2, Rondo Mogilskie, 2, Rondo Grzegórzeckie, 3, Hala Targowa, 3, Starowiślna, 2, Miodowa, 2, Św. Wawrzyńca, 2, Plac Bohaterów Getta, 3, Powstańców Wielkopolskich, 2, Cmentarz Podgórski, 2, Dworcowa, 2, Kabel, 2, Bieżanowska, 2, Dauna, 1, Paiski Nowe, 1, Nowosądecka, 1, Witosa, 1, Kurdwanów
+4
+Wzgórza Krzesławickie, 2, Jarzębiny, 3, Darwina, 1, Wiadukty, 2, Elektromontaż, 2, Zajezdnia Nowa Huta, 3, Kombinat, 2, Struga, 2, Plac Centralny, 2, Os. Kolorowe, 3, Rondo Czyżyńskie, 2, Centralna, 2, Nowohucka, 3, M1 Al. Pokoju, 3, Lema, 1, Kraków Plaza, 1, Dąbie, 2, Ofiar Dąbia, 2, Fabryczna, 1, Francesco Nullo, 2, Kordylewskiego, 1, Rondo Grzegórzeckie, 2, Rondo Mogilskie, 2, Lubicz, 3, Dworzec Główny, 2, Basztowa LOT, 2, Teatr Bagatela, 1, Batorego, 1, Plac Inwalidów, 3, Urzędnicza, 2, Biprostal, 1, Uniwersytet Pedagogiczny, 2, Głowackiego, 1, Bronowice, 1, Wesele, 2, Balicka Wiadukt, 1, Bronowice Małe
+1
+Salwator, 1, Komorowskiego, 1, Jubilat, 2, Filharmonia, 2, Plac Wszystkich Świętych, 2, Poczta Główna, 3, Starowiślna, 2, Hala Targowa, 3, Rondo Grzegórzeckie, 2, Kordylewskiego, 1, Francesco Nullo, 1, Fabryczna, 2, Ofiar Dąbia, 1, Dąbie
+3
+Nowy Bieżanów, 2, Ćwiklińskiej, 3, Nowy Prokocim, 1, Teligi, 1, Prokocim Szpital, 2, Prokocim, 3, Wlotowa, 1, Bieżanowska, 2, Kabel, 3, Dworcowa, 1, Cmentarz Podgórski, 2, Powstańców Wielkopolskich, 2, Plac Bohaterów Getta, 2, Św. Wawrzyńca, 2, Miodowa, 2, Starowiślna, 3, Poczta Główna, 2, Dworzec Główny, 2, Dworzec Główny Zachód, 1, Politechnika, 2, Dworzec Towarowy, 1, Prądnicka, 1, Bratysławska, 1, Krowodrza Górka
+11
+Mały Płaszów, 3, Rzebika, 2, Lipska, 1, Gromadzka, 3, Kuklińskiego, 2, Klimeckiego, 1, Zabłocie, 1, Rondo Grzegórzeckie, 3, Hala Targowa, 2, Starowiślna, 2, Stradom, 2, Orzeszkowej, 3, Most Grunwaldzki, 1, Szwedzka, 1, Kapelanka, 2, Słomiana, 3, Kobierzyńska, 2, Lipińskiego, 2, Grota-Roweckiego, 1, Norymberska, 3, Ruczaj, 2, Kampus UJ, 1, Chmieleniec, 1, Czerwone Maki
+174
+Os. Kurdwanów, 1, Stojałowskiego, 1, Halszki, 1, Bujaka, 2, Kurdwanów, 3, Beskidzka, 1, Wola Duchacka, 2, Zajezdnia Wola Duchacka, 1, Sławka, 2, Kamińskiego, 2, Bonarka, 1, Kamińskiego Wiadukt, 3, Powstańców Wielkopolskich, 2, Kuklińskiego, 2, Stoczniowców, 2, Koszykarska, 1, Elektrociepłownia Kraków, 2, M1 Nowohucka, 2, Nowohucka, 3, Centralna, 3, Rondo Czyżyńskie, 3, Os. Kolorowe, 2, Plac Centralny, 2, Os. Na Skarpie, 1, Klasztorna, 2, Bulwarowa Ogórdki, 2, Bulwarowa, 2, Kombinat

@@ -1,0 +1,5 @@
+2
+18
+Czerwone_Maki, 2, Chmieleniec, 1, Kampus_UJ, 2, Ruczaj, 3, Norymberska, 2, Grota-Roweckiego, 2, Lipińskiego, 2, Kobierzyńska,3,Słomiana, 2, Kapelanka, 3, Szwedzka, 1, Most Grunwaldzki, 1, Oszeszkowej, 3, Stradom, 2, Wawel, 1, Św. Gertrudy, 1, Plac Wszystkich Świętych, 1, Filharmonia, 2, Teatr Bagatela, 2, Basztowa LOT, 1, Pędzichów, 1, Nowy Kleparz, 1, Dworzec Towarowy, 2, Prądnicka, 1, Bratysławska, 2, Krowodrza_Górka
+164
+Piaski_Nowe, 2, Nowosadecka, 1, Wielicka, 2, Górka_Narodowa
