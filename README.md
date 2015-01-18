@@ -33,13 +33,13 @@ Czerwone_Maki, 2, Chmieleniec, 1, Kampus_UJ, 2, ..., 3, Krowodrza Górka
 164
 Piaski_Nowe, 2, Nowosądecka, 1, ..., 2, Górka Narodowa
 
-6) EXAMPLE OUTPUT - PROBLEM 1: 
+7) EXAMPLE OUTPUT - PROBLEM 1: 
 Type starting stop: Kampus_UJ
 Type ending stop: Teatr_Bagatela
 Shortest connection: Kampus_UJ, Ruczaj, Norymberska, ..., Filharmonia, Teatr_Bagatela (travel time 30)
 52 → 11 → 18
 
-7) EXAMPLE OUTPUT - PROBLEM 2: 
+8) EXAMPLE OUTPUT - PROBLEM 2: 
 Type number of stops to visit: 5
 Type name of 1st stop: Kampus_UJ
 ...
