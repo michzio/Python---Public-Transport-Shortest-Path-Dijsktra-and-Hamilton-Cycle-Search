@@ -46,18 +46,21 @@ class Vertex(str):
 	def __hash__(self): 
 		return hash(repr(self))
 
+class VertexNotExistsError(Exception):
+	pass 
+
 class Graph: 
 	""" Klasa reprezentująca graf. """
 
 	INFINITY = float("inf")
 
-	def __init__(self):
+	def __init__(self, graph=None):
 		""" Kontruktor tworzący pusty graf.  
 		    Graf będzie reprezentowany w postaci słownika, 
 		    którego kluczami są wierzchołki, a elementami lista
 		    krawędzi prowadzących do sąsiadującego wierzchołka."""
 
-		self.graph = { } # pusty słownik (implementacja listy sąsiedztwa)
+		self.graph = graph if graph else dict() # domyślnie pusty słownik (implementacja listy sąsiedztwa)
 		self.dijkstra = None 
 
 	def __str__(self): 
@@ -135,11 +138,6 @@ class Graph:
 		return min_edge_weight
 
 
-	def get_subgraph(self, nodes):
-		""" Metoda zwraca podgraf z wybranymi węzłami. """
-		pass
-
-
 	def find_min_path(self, v1, v2): 
 		""" Metoda znajdująca najkrótszą scieżkę (o najniższym koszcie)
 			pomiędzy wierzchołkami v1 i v2 grafu. """
@@ -157,7 +155,19 @@ class Graph:
 			min_path.append(min_path_edges[-1].target())
 			return (min_path_cost, min_path)
 
+	def get_subgraph(self, nodes):
+		""" Metoda zwraca podgraf z wybranymi węzłami. 
+			Tworzy nowy obiekt grafu tylko z wybranymi 
+			wierzchołami i odpowiadającymi im krawędziami. 
+			Jeżeli wskazany wierzchołek nie istnieje to wyrzuca błąd. """
 
+		# przekopiowanie grafu tylko z wybranymi wierzchołkami 
+		subgraph = { node: edges for (node, edges) in self.graph.items() if node in nodes }
 
+		# usunięcie niepoprawnych krawędzi 
+		for node in subgraph:
+			for edge in subgraph[node]: 
+				if edge.target() not in subgraph:
+					subgraph[node].remove(edge)
 
-
+		return Graph(subgraph)

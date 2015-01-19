@@ -10,6 +10,8 @@ class SimulatedAnnealing:
 	def __init__(self, graph): 
 		""" Konstruktor obiektu. """
 		self.graph = graph
+		# mapowanie indeks -> wierzchołek grafu 
+		self.index_to_node = self.graph.vertices(); 
 
 	def optimal_hamiltonian_cycle(self):
 		""" Metoda znajdująca optymalny (minimalny) cykl Hamiltona w grafie. """

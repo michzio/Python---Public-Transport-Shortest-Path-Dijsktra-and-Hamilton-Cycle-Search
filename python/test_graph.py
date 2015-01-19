@@ -41,6 +41,13 @@ class TestGraph(unittest.TestCase):
 		self.assertTrue(len(str(self.graph)) > 0)
 		self.graph.print_graph()
 
+	def test_get_subgraph(self): 
+		subgraph = self.graph.get_subgraph(["e", "b", "d", "c"])
+		subgraph.print_graph()
+		self.assertEqual(subgraph.number_of_vertices(), 4)
+		self.assertEqual(subgraph.number_of_edges(), 8)
+		pass
+
 	def tearDown(self): 
 		return 
 
