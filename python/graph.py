@@ -22,6 +22,12 @@ class Edge:
 	def __invert__(self): 
 		return Edge(self.end, self.start, self.weight)
 
+	def __repr__(self): 
+		return "Edge(" + repr(self.start) + ", " + repr(self.end) + ", " + str(self.weight) + ")"
+
+	def __eq__(self, other): 
+		return repr(self) == repr(other)
+
 class Vertex(str): 
 	""" Klasa reprezentująca wierzchołki grafu. """
 	
@@ -47,7 +53,6 @@ class Graph:
 		    krawędzi prowadzących do sąsiadującego wierzchołka."""
 
 		self.graph = { } # pusty słownik (implementacja listy sąsiedztwa)
-		self.vertices_number = 0 # liczba wierzchołków grafu  
 
 	def __str__(self): 
 		""" Reprezentacja tekstowa grafu. """
@@ -60,7 +65,7 @@ class Graph:
 		print()
 
 	def number_of_vertices(self): 
-		return self.vertices_number 
+		return len(self.graph)
 
 	def number_of_edges(self): 
 		return sum(len(self.graph[node]) for node in self.graph )
@@ -68,13 +73,19 @@ class Graph:
 	def add_vertex(self, node): 
 		""" Metoda dodaje nowy wierzchołek do grafu."""
 		if node not in self.graph: 
-			graph[node] = []   # inicjalizacja pustą listą krawędzi 
+			self.graph[node] = []   # inicjalizacja pustą listą krawędzi 
 
 	def add_edge(self, edge): 
 		""" Metoda dodaje nową krawędź do grafu."""
 		self.add_vertex(edge.source())
 		self.add_vertex(edge.target()) # dodanie wierzchołków jeżeli nie istnieja
 		self.graph[edge.source()].append(edge)
+
+	def add_undirected_edge(self, v1, v2, weight): 
+		""" Metoda dodaje nieskierowaną krwaędź pomiędzy 
+			wierzchołkami v1, v2 z wagą weight."""
+		self.add_edge(Edge(v1,v2,weight))
+		self.add_edge(Edge(v2, v1, weight))
 
 	def direct_edge(self, v1, v2): 
 		""" Metoda wyszukuje bezpośredniej krawędzi z v1 do v2. """
@@ -84,9 +95,12 @@ class Graph:
 					return edge 
 		return None
 
-	def vertices(self):
+	def vertices_iterator(self):
 		for node in self.graph.keys():
 			yield node
+
+	def vertices(self): 
+		return self.graph.keys()
 
 	def get_edges_from(self, v): 
 		return self.graph.get(v)
