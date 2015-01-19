@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 import graph 
 
 
@@ -15,6 +16,12 @@ class Connection(graph.Edge):
 	def __invert__(self): 
 		return Stop(self, self.line_no, 
 			self.end, self.time, self.start)
+
+	def __repr__(self): 
+		return "Connection(" + repr(self.line_no) + ", " + repr(self.start) + ", " + repr(self._weight) + "," + repr(self.end) + ", " + ")"
+	
+	def __eq__(self, other): 
+		return repr(self) == repr(other)
 
 	def time(self): 
 		return self.weight 
@@ -35,19 +42,23 @@ class TransportNetwork(graph.Graph):
 	def load_from_file(filename):
 		""" Factory method, która tworzy sieć transportową z pliku."""
 		network = TransportNetwork()
-		print("Tworzenie sieci transportowej...")
+		print("Tworzenie sieci transportowej z pliku: %s..." % filename)
 		return network 
 
 	def __str__(self): 
 		""" Reprezentacja tekstowa sieci transportowej."""
-		print("Sieć transportu publicznego: ")
+		output = "Sieć transportu publicznego: "
 		for key in self.graph: 
-			print(" %s | " % str(self.graph[key]), end="")
+			output += " %s | " % str(key)
 			for conn in self.graph[key]: # pętla po połączeniach
-				print("%s (linia:%d, czas:%d), " % (
-					str(conn.end_stop()), conn.line_no(), conn.time()), end="")
-			print()
-		print()
+				output += "%s (linia:%d, czas:%d), " % (
+					conn.end_stop(), conn.line_no(), conn.time())
+			output += "\n"
+		output += "\n"
+		return output
+
+	def print_network(self): 
+		print(self)
 
 	def number_of_stops(self): 
 		return graph.Graph.number_of_vertices(self)
@@ -68,6 +79,16 @@ class TransportNetwork(graph.Graph):
 		return graph.Graph.get_edges_from(self, stop)
 
 	# get_neighbours is inherited 
+
+	def travel_time_between(self, stop1, stop2): 
+		""" Najkrótszy czas przejazdu pomiędzy przystankami lub INFINITE. """
+		return graph.Graph.weight_between(self, stop1, stop2)
+
+	def get_subnetwork(self, stops): 
+		""" Metoda zwraca pod sieć publicznego transportu, 
+			zawierająca wskazane przystanki."""
+		return graph.Graph.get_subgraph(self, stops)
+
 
 
 

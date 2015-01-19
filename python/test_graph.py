@@ -19,7 +19,7 @@ class TestGraph(unittest.TestCase):
 		self.graph.add_undirected_edge(Vertex("c"), Vertex("d"), 2)
 		self.graph.add_undirected_edge(Vertex("d"), Vertex("e"), 3)
 		self.graph.add_undirected_edge(Vertex("d"), Vertex("f"), 4)
-	
+
 	def test_add_vertex(self): 
 		G = Graph() 
 		G.add_vertex(Vertex("5"))
@@ -36,6 +36,11 @@ class TestGraph(unittest.TestCase):
 	def test_direct_edge(self): 
 		self.assertEqual(self.graph.direct_edge(Vertex("b"), Vertex("e")), 
 			Edge(Vertex("b"), Vertex("e"), 2))
+
+	def test_print_graph(self): 
+		self.assertTrue(len(str(self.graph)) > 0)
+		self.graph.print_graph()
+
 	def tearDown(self): 
 		return 
 

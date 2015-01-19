@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 class Edge: 
 	""" Krawędzie będą elementami list sąsiedztwa przyporządkowanym 
 	    poszczególnym wierzchołkom grafu. Dzięki temu mamy możliwość 
@@ -8,7 +9,7 @@ class Edge:
 		""" Konstruktor krawędzi grafu w grafie skierowanym, z wagami. """
 		self.start = start 
 		self.end = end
-		self.weight = weight
+		self._weight = weight
 
 	def target(self): # wierzchołek docelowy
 		return self.end
@@ -17,13 +18,13 @@ class Edge:
 		return self.start
 
 	def weight(self): # waga krawędzi 
-		return self.weight
+		return self._weight
 
 	def __invert__(self): 
 		return Edge(self.end, self.start, self.weight)
 
 	def __repr__(self): 
-		return "Edge(" + repr(self.start) + ", " + repr(self.end) + ", " + str(self.weight) + ")"
+		return "Edge(" + repr(self.start) + ", " + repr(self.end) + ", " + repr(self._weight) + ")"
 
 	def __eq__(self, other): 
 		return repr(self) == repr(other)
@@ -56,13 +57,17 @@ class Graph:
 
 	def __str__(self): 
 		""" Reprezentacja tekstowa grafu. """
-		print("Graf: ")
+		output = "Graf: "
 		for key in self.graph: 
-			print(" %s | " % str(self.graph[key]), end="")
+			output += " %s | " % str(key)
 			for edge in self.graph[key]:
-				print("%s (%d), " % (str(edge.target()), edge.weight()), end="")
-			print()
-		print()
+				output += "%s (%s), " % (edge.target(), edge.weight())
+			output += "\n"
+		output += "\n"
+		return output
+
+	def print_graph(self):
+		print(self)
 
 	def number_of_vertices(self): 
 		return len(self.graph)
@@ -109,6 +114,17 @@ class Graph:
 		if v in self.graph: 
 			return [edge.target() for edge in self.graph[v]]
 		return None
+
+	def weight_between(self, v1, v2): 
+		""" Metoda wzraca minimalną wagę pomiędzy 
+			dwoma wierzchołkami grafu lub INFINITE. """ 
+		pass
+
+	def get_subgraph(self, nodes):
+		""" Metoda zwraca podgraf z wybranymi węzłami. """
+		pass
+
+
 
 
 
