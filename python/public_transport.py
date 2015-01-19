@@ -1,11 +1,12 @@
 #-*-coding:utf-8-*-
 import graph 
+import dijkstra
 
 
 class Stop(graph.Vertex):
 	""" Klasa reprezentuje przystanek. """
 	def __repr__(self):
-		return "Stop(" + str(self) + ")"
+		return 'Stop("' + str(self) + '")'
 	def __hash__(self): 
 		return hash(repr(self))
 
@@ -79,7 +80,7 @@ class TransportNetwork(graph.Graph):
 
 				end_stop = tokens[j+1]
 				#print ("%s - %s - %s" % (start_stop, travel_time, end_stop))
-				network.add_undirected_connection(line_no, start_stop, end_stop, travel_time)
+				network.add_undirected_connection(line_no, Stop(start_stop.strip()), Stop(end_stop.strip()), travel_time)
 		file.close()
 		return network 
 
@@ -134,9 +135,26 @@ class TransportNetwork(graph.Graph):
 		""" Metoda zwraca pod sieć publicznego transportu, 
 			zawierająca wskazane przystanki."""
 		return graph.Graph.get_subgraph(self, stops)
-		
+
 	def get_stops(self): 
 		return graph.Graph.vertices(self)
+
+	def find_shortest_connection(self, stop1, stop2): 
+
+		if not self.dijkstra: 
+			self.dijkstra = dijkstra.Dijkstra(self) 
+
+		min_travel_time, min_connections_path = self.dijkstra.min_path(stop1, stop2)
+
+		if not min_connections_path: 
+			print("Brak połączenia pomiędzy przystankami....")
+			return (None, None)
+		else: 
+			shortest_connection = [ str(conn.start_stop()) + "(" + str(conn.line_number()) + ")" for conn in min_connections_path]
+			shortest_connection.append(str(min_connections_path[-1].end_stop()))
+			return (min_travel_time, shortest_connection)
+
+
 
 
 

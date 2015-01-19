@@ -41,7 +41,7 @@ class Vertex(str):
 		return str(self.label)
 
 	def __repr__(self): 
-		return "Vertex(" + str(self) + ")"
+		return 'Vertex("' + str(self) + '")'
 
 	def __hash__(self): 
 		return hash(repr(self))

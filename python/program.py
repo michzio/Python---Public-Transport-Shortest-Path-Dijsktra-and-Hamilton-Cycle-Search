@@ -17,4 +17,6 @@ import public_transport
 network = public_transport.TransportNetwork.load_from_file("rozklad2.txt")
 
 network.print_network()
+print(network.find_shortest_connection(public_transport.Stop("Czerwone Maki"), public_transport.Stop("Most Grunwaldzki")) )
+
 

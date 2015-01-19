@@ -31,6 +31,7 @@ class Dijkstra:
 		if self.source_node != source: 
 			self.find_min_paths_from(source)
 
+		#print(self.path_cost)
 		if self.path_cost[target] == Dijkstra.INFINITY: 
 			return (None, None) # koszt = None, ścieżka = None 
 
