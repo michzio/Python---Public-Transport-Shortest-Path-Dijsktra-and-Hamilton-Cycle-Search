@@ -14,5 +14,7 @@
 import public_transport
 
 
-public_transport.TransportNetwork.load_from_file("file.txt")
+network = public_transport.TransportNetwork.load_from_file("rozklad2.txt")
+
+network.print_network()
 

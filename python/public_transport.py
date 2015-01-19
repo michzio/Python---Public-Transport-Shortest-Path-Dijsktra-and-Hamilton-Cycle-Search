@@ -4,7 +4,11 @@ import graph
 
 class Stop(graph.Vertex):
 	""" Klasa reprezentuje przystanek. """
-	pass 
+	def __repr__(self):
+		return "Stop(" + str(self) + ")"
+	def __hash__(self): 
+		return hash(repr(self))
+
 
 class Connection(graph.Edge):
 	""" Klasa reprezentująca połączenie komunikacyjne
@@ -24,9 +28,9 @@ class Connection(graph.Edge):
 		return repr(self) == repr(other)
 
 	def time(self): 
-		return self.weight 
+		return graph.Edge.weight(self) 
 
-	def line_no(self):
+	def line_number(self):
 		return self.line_no
 
 	def start_stop(self): 
@@ -43,16 +47,51 @@ class TransportNetwork(graph.Graph):
 		""" Factory method, która tworzy sieć transportową z pliku."""
 		network = TransportNetwork()
 		print("Tworzenie sieci transportowej z pliku: %s..." % filename)
+		
+		file = open(filename, "r")
+		try: 
+			no_of_lines = int(file.readline())
+		except ValueError: 
+			print("Niepoprawna liczba linii autobusowych!")
+			file.close()
+			return None
+
+		for i in range(no_of_lines): 
+			try: 
+				line_no = int(file.readline())
+			except ValueError: 
+				print("Niepoprawny numer linii!")
+				file.close()
+				return None
+			
+			line_schedule = file.readline()
+			tokens = line_schedule.split(",")
+			end_stop = tokens[0]
+			for j in range(1,len(tokens)-2, 2): # parsing each schedule line
+				start_stop = end_stop
+				
+				try: 
+					travel_time = int(tokens[j])
+				except ValueError: 
+					print("Błedna wartość czasu przejazdu pomiędzy przystankami!")
+					file.close()
+					return None 
+
+				end_stop = tokens[j+1]
+				#print ("%s - %s - %s" % (start_stop, travel_time, end_stop))
+				network.add_undirected_connection(line_no, start_stop, end_stop, travel_time)
+		file.close()
 		return network 
 
 	def __str__(self): 
 		""" Reprezentacja tekstowa sieci transportowej."""
 		output = "Sieć transportu publicznego: "
 		for key in self.graph: 
-			output += " %s | " % str(key)
+			output += "%s: " % str(key) + "\n"
 			for conn in self.graph[key]: # pętla po połączeniach
 				output += "%s (linia:%d, czas:%d), " % (
-					conn.end_stop(), conn.line_no(), conn.time())
+					conn.end_stop(), conn.line_number(), conn.time()) 
+				output += "\n"
 			output += "\n"
 		output += "\n"
 		return output
@@ -72,6 +111,13 @@ class TransportNetwork(graph.Graph):
 	def add_connection(self, conn): 
 		graph.Graph.add_edge(self, conn)
 
+	def add_undirected_connection(self, line_no, stop1, stop2, travel_time):
+		""" Metoda dodaje połączenie pomiędzy przystankami o zadanym czasie 
+			jednocześnie w obu kierunkach stop1->stop2 i stop2->stop1 
+			dla linii line_no. """
+		self.add_connection(Connection(line_no, stop1, travel_time, stop2))
+		self.add_connection(Connection(line_no, stop2, travel_time, stop1))
+
 	def direct_connection(self, stop1, stop2): 
 		return graph.Graph.direct_edge(self, stop1, stop2)
 
@@ -88,6 +134,8 @@ class TransportNetwork(graph.Graph):
 		""" Metoda zwraca pod sieć publicznego transportu, 
 			zawierająca wskazane przystanki."""
 		return graph.Graph.get_subgraph(self, stops)
+	def get_stops(self): 
+		return graph.Graph.vertices(self)
 
 
 
