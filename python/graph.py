@@ -58,6 +58,7 @@ class Graph:
 		    krawędzi prowadzących do sąsiadującego wierzchołka."""
 
 		self.graph = { } # pusty słownik (implementacja listy sąsiedztwa)
+		self.dijkstra = None 
 
 	def __str__(self): 
 		""" Reprezentacja tekstowa grafu. """
@@ -138,6 +139,23 @@ class Graph:
 		""" Metoda zwraca podgraf z wybranymi węzłami. """
 		pass
 
+
+	def find_min_path(self, v1, v2): 
+		""" Metoda znajdująca najkrótszą scieżkę (o najniższym koszcie)
+			pomiędzy wierzchołkami v1 i v2 grafu. """
+		
+		if not self.dijkstra: 
+			self.dijkstra = dijkstra.Dijkstra(self)
+
+		min_path_cost, min_path_edges = self.dijkstra.min_path(v1, v2)
+
+		if not min_path_edges: 
+			print("Brak połączenia pomiędzy wierzchołkami...")
+			return (None, None)
+		else: 
+			min_path = [ edge.source() for edge in min_path_edges]
+			min_path.append(min_path_edges[-1].target())
+			return (min_path_cost, min_path)
 
 
 

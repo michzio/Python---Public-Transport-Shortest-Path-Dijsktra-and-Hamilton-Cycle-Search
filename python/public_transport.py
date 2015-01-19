@@ -134,6 +134,7 @@ class TransportNetwork(graph.Graph):
 		""" Metoda zwraca pod sieć publicznego transportu, 
 			zawierająca wskazane przystanki."""
 		return graph.Graph.get_subgraph(self, stops)
+		
 	def get_stops(self): 
 		return graph.Graph.vertices(self)
 
