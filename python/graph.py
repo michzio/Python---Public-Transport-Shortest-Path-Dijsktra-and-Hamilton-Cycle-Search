@@ -1,4 +1,6 @@
 #-*-coding:utf-8-*-
+import dijkstra
+
 class Edge: 
 	""" Krawędzie będą elementami list sąsiedztwa przyporządkowanym 
 	    poszczególnym wierzchołkom grafu. Dzięki temu mamy możliwość 
@@ -46,6 +48,8 @@ class Vertex(str):
 
 class Graph: 
 	""" Klasa reprezentująca graf. """
+
+	INFINITY = float("inf")
 
 	def __init__(self):
 		""" Kontruktor tworzący pusty graf.  
@@ -116,9 +120,19 @@ class Graph:
 		return None
 
 	def weight_between(self, v1, v2): 
-		""" Metoda wzraca minimalną wagę pomiędzy 
-			dwoma wierzchołkami grafu lub INFINITE. """ 
-		pass
+		""" Metoda zwraca minimalną wagę połączenia 
+		    bezpośredniego (pojedynczej krawędzi) pomiędzy 
+			dwoma wierzchołkami grafu lub INFINITY. """ 
+		min_edge_weight = float("inf")
+
+		# przeglądamy lis†ę sąsiedztwa dla wierzchołka v1 
+		for edge in self.get_edges_from(v1):
+			if edge.target() == v2: 
+				if min_edge_weight > edge.weight():
+					min_edge_weight = edge.weight()
+
+		return min_edge_weight
+
 
 	def get_subgraph(self, nodes):
 		""" Metoda zwraca podgraf z wybranymi węzłami. """
