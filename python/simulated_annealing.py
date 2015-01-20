@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-
 import random
 import math
+from public_transport import Connection
 
 class SimulatedAnnealing: 
 	""" Klasa implementująca algorytm heurystyczny symulowanego wyrzażania."""
@@ -15,7 +16,7 @@ class SimulatedAnnealing:
 		""" Konstruktor obiektu. """
 		self.graph = graph
 		# mapowanie indeks -> wierzchołek grafu 
-		self.index_to_node = self.graph.vertices(); 
+		# self.index_to_node = self.graph.vertices(); 
 
 	def optimal_hamiltonian_cycle(self):
 		""" Metoda znajdująca optymalny (minimalny) cykl Hamiltona w grafie. """
@@ -32,6 +33,10 @@ class SimulatedAnnealing:
 			if type(edge) is Connection: 
 				printable_cycle += "(" + edge.line_number() + ")"
 			printable_cycle += "->"
+		# appending connection from last to first node 
+		printable_cycle += str(edge_cycle[-1].target())
+		if type(edge_cycle[-1]) is Connection: 
+				printable_cycle += "(" + edge_cycle[-1].target().line_number() + ")"
 
 		return (best_travel_time, printable_cycle)
 
@@ -45,11 +50,11 @@ class SimulatedAnnealing:
 
 		# 2. INICJALIZACJA TEMPERATURY I POCZĄTKOWEGO ROZWIĄZANIA 
 		# parametry sterujące algorytmem
-		T = INITIAL_TEMPERATURE
-		temperature_length = INITIAL_TEMPTERATURE_LENGTH
+		T = self.INITIAL_TEMPERATURE
+		temperature_length = self.INITIAL_TEMPTERATURE_LENGTH
 		# bieżące rozwiązanie 
 		curr_solution = permutation
-		curr_travel_time = hamiltonian_cycle_travel_time(curr_solution)
+		curr_travel_time = self.hamiltonian_cycle_travel_time(curr_solution)
 
 		# najlepsze rozwiązanie 
 		best_solution = curr_solution
@@ -98,17 +103,17 @@ class SimulatedAnnealing:
 						curr_travel_time += time_delta
 
 			# 6. SCHŁADZANIE - OBNIŻANIE TEMPERATURY
-			T *= COOLING_RATIO
+			T *= self.COOLING_RATIO
 
 			# zwiększenie liczby prób dla niższych temperatur 
-			length_ratio =  5.0 if INITIAL_TEMPERATURE/T > 5.0 else INITIAL_TEMPERATURE/T
-			temperature_length = INITIAL_TEMPTERATURE_LENGTH*length_ratio
+			length_ratio =  5.0 if self.INITIAL_TEMPERATURE/T > 5.0 else self.INITIAL_TEMPERATURE/T
+			temperature_length = int(self.INITIAL_TEMPTERATURE_LENGTH*length_ratio)
 
 			if T <= 1: # warunek końca pętli 
 				break
 
 		# 7. KONIEC - najlepsze rozwiązanie to best_travel_time, best_solution
-		if best_travel_time == SimulatedAnnealing.INFINITY: 
+		if best_travel_time == self.INFINITY: 
 			return (None, None)
 
 		edge_cycle = []
@@ -116,11 +121,11 @@ class SimulatedAnnealing:
 		# 8. REKONSTRUKCJA CYKLU HAMILTONA NA PODSTAWIE PERMUTACJI WIERZCHOŁKÓW
 		for i in range(len(best_solution)):
 			vi = best_solution[i]
-			vj = best_solution[(i+1)/len(best_solution)]
+			vj = best_solution[(i+1)%len(best_solution)]
 
 			best_edge = None 
-			for edge in self.graph[vi]:
-				if best_edge == None || best_edge.weight() > edge.weight:
+			for edge in self.graph.get_edges_from(vi):
+				if best_edge == None or best_edge.weight() > edge.weight():
 					best_edge = edge
 
 			if not best_edge: # brak połączenia pomiedzy wierzchołkiem vi - vj 
@@ -130,28 +135,7 @@ class SimulatedAnnealing:
 
 		return (best_travel_time, edge_cycle)
 
-	def hamiltonian_cycle_travel_time(self, permutation): 
-		""" Metoda pomocnicza zwracająca czas przejazdu dla danego cyklu. 
-			Jeżeli dla przekazanej permutacji wierzchołków cykl nie istnieje 
-			(brak którejś z krawędzi) to metoda zwraca INFINITY."""
-
-		travel_time = 0 
-
-		# pętla po kolejnych parach wierzchołków
-		for i in range(len(permutation)): 
-			vi = permutation[i]
-			vj = permutation[(i+1)/len(best_solution)]
-
-			# zapytanie o czas przejazdu między vi - vj
-			edge_travel_time = self.graph.weight_between(vi,vj)
-			# jeżeli INFINITY to brak krawędzi 
-			if edge_travel_time == SimulatedAnnealing.INFINITY:
-				return SimulatedAnnealing.INFINITY
-			travel_time += edge_travel_time
-		
-		return travel_time 
-
-	def generate_new_solution(old_solution):
+	def generate_new_solution(self, old_solution):
 		""" Metoda pomocnicza, które generuje nowe rozwiązanie (permutacje) 
 			na podstawie starego. Algorytm generowania nowej permutacji: 
 			1. Losowe wygenerowanie indeksów vi_idx, vj_idx z przedziału [0, len(permutation))
@@ -164,14 +148,14 @@ class SimulatedAnnealing:
 
 		# 1. losowanie indeksów vi_idx < vj_idx
 		n = len(new_solution)
-		vi_idx = random.randrange(0, n-2)
+		vi_idx = random.randrange(0, n-1) %n # 
 		while True: 
 			vj_idx = (random.randrange(0, n-(vi_idx+1)) + (vi_idx+2) ) % n 
 			if vi_idx != vj_idx and vi_idx != ((vj_idx+1)%n):
 				break
 
-		print("Wylosowano pary indeksów (vi, vi+1) = (%d, %d) oraz (vj, vj+1) = (%d,%d)", 
-			vi_idx, (vi_idx+1)%n, vj_idx, (vj_idx+1)%n)
+		print("Wylosowano pary indeksów (vi, vi+1) = (%d, %d) oraz (vj, vj+1) = (%d,%d)" % 
+			(vi_idx, (vi_idx+1)%n, vj_idx, (vj_idx+1)%n))
 
 		# 2. zamiana par wierzchołków (vi, vi+1) i (vj, vj+1)
 		#    otrzymując parę (vi, vj) oraz (vi+1, vj+1)
@@ -181,12 +165,12 @@ class SimulatedAnnealing:
 		# 3. odwróceie kolejności elementów podlisty (vi+1,...vj) -> (vj, ..., vi+1)
 		new_solution[((vi_idx+1)%n+1):vj_idx] = new_solution[((vi_idx+1)%n+1):vj_idx][::-1]
 
-		print_permutation(old_solution)
-		print_permutation(new_solution)
+		self.print_permutation(old_solution)
+		self.print_permutation(new_solution)
 
 		return (new_solution, vi_idx, vj_idx)
 
-	def travel_time_change(old_travel_time, new_solution, vi_idx, vj_idx): 
+	def travel_time_change(self, old_travel_time, new_solution, vi_idx, vj_idx): 
 		""" Metoda pomocincza, która oblicza zmianę czasu przejazdu pomiędzy starym, a nowym rozwiązaniem. 
 			1. stare rozwiązanie nie było poprawnym cyklem, nowa permutacja może nim być, ale nie musi
 			   (potrzeba na nowo wyznaczyć długość cyklu dla permutacji wierzchołków)
@@ -196,7 +180,7 @@ class SimulatedAnnealing:
 		time_delta = 0 
 
 		# 1. stara permutacja nie była cyklem 
-		if old_travel_time == SimulatedAnnealing.INFINITY: 
+		if old_travel_time == self.INFINITY: 
 			# obliczamy czas przejścia nowej permutacji 
 			new_travel_time = self.hamiltonian_cycle_travel_time(new_solution)
 			# obliczenie zmiany czasu 
@@ -208,10 +192,11 @@ class SimulatedAnnealing:
 			#    wyznaczenie różnicy przyrostowo ze wzoru: 
 			#    time_delta = time(vi, vi+1) + time(vj,vj+1) - time(vi,vj) - time(vi+1,vj+1)
 			#	 jeżeli którakolwiek z nowych krawędzi nie istnieje to time_delta = INFINITY
+			n = len(new_solution)
 			time_new_edge_i = self.graph.weight_between(new_solution[vi_idx], new_solution[(vi_idx+1)%n])
 			time_new_edge_j = self.graph.weight_between(new_solution[vj_idx], new_solution[(vj_idx+1)%n])
 
-			if time_new_edge_i == SimulatedAnnealing.INFINITY or time_new_edge_j == SimulatedAnnealing.INFINITY:
+			if time_new_edge_i == self.INFINITY or time_new_edge_j == self.INFINITY:
 				time_delta = INFINITY - old_travel_time # należy odjąć czas starego cyklu 
 			else: 
 				# obydwa cykle poprawne - obliczmy różnicę czasów 
@@ -226,14 +211,34 @@ class SimulatedAnnealing:
 		# time_delta < 0, obie permutacje są cyklami, nowa ma krótszy czas 
 		# time_delta > 0, obie pertmuacje są cyklami, nowa ma dłuższy czas 
 		# time_delta >> 0, nowa permutacja nie jest cyklem, stara była cyklem
-		return travel_time_delta
-		
+		return time_delta
 
-	def print_permutation(permutation): 
+	def hamiltonian_cycle_travel_time(self, permutation): 
+		""" Metoda pomocnicza zwracająca czas przejazdu dla danego cyklu. 
+			Jeżeli dla przekazanej permutacji wierzchołków cykl nie istnieje 
+			(brak którejś z krawędzi) to metoda zwraca INFINITY."""
+		
+		travel_time = 0 
+
+		# pętla po kolejnych parach wierzchołków
+		for i in range(len(permutation)): 
+			vi = permutation[i]
+			vj = permutation[(i+1)%len(permutation)]
+
+			# zapytanie o czas przejazdu między vi - vj
+			edge_travel_time = self.graph.weight_between(vi,vj)
+			# jeżeli INFINITY to brak krawędzi 
+			if edge_travel_time == self.INFINITY:
+				return self.INFINITY
+			travel_time += edge_travel_time
+		
+		return travel_time
+
+	def print_permutation(self, permutation): 
 		""" Wypisanie permutacji."""
 		print("-".join(permutation)) 
 
-	def probability(time_delta, T): 
+	def probability(self, time_delta, T): 
 		""" Prawdopodobieństwo akceptacji nowej permutacji cyklu. Zależy od:
 			1. różnica czasu przejazdu między nowym i starym cyklem 
 			   im większe wydłużenie czasu to mniejsze prawdopodobieństwo 
