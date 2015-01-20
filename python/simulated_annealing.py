@@ -187,9 +187,47 @@ class SimulatedAnnealing:
 		return (new_solution, vi_idx, vj_idx)
 
 	def travel_time_change(old_travel_time, new_solution, vi_idx, vj_idx): 
-		""" Metoda pomocincza, która oblicza zmianę czasu przejazdu pomiędzy starym, a nowym rozwiązaniem. """
-		pass
-		# return travel_time_delta
+		""" Metoda pomocincza, która oblicza zmianę czasu przejazdu pomiędzy starym, a nowym rozwiązaniem. 
+			1. stare rozwiązanie nie było poprawnym cyklem, nowa permutacja może nim być, ale nie musi
+			   (potrzeba na nowo wyznaczyć długość cyklu dla permutacji wierzchołków)
+			2. stare rozwiązanie było poprawnym cyklem, po zmianie nowa permutacja może być poprawnym 
+			   cyklem, ale nie musi."""
+
+		time_delta = 0 
+
+		# 1. stara permutacja nie była cyklem 
+		if old_travel_time == SimulatedAnnealing.INFINITY: 
+			# obliczamy czas przejścia nowej permutacji 
+			new_travel_time = self.hamiltonian_cycle_travel_time(new_solution)
+			# obliczenie zmiany czasu 
+			# a) INFINITY - INFINITY == 0, obie permutacje nie są cyklem
+			# b) new_time - INFINITY < 0, nowa permutacja jest cyklem 
+			time_delta = new_travel_time - old_travel_time
+		else:
+			# 2. stara permutacja była cyklem 
+			#    wyznaczenie różnicy przyrostowo ze wzoru: 
+			#    time_delta = time(vi, vi+1) + time(vj,vj+1) - time(vi,vj) - time(vi+1,vj+1)
+			#	 jeżeli którakolwiek z nowych krawędzi nie istnieje to time_delta = INFINITY
+			time_new_edge_i = self.graph.weight_between(new_solution[vi_idx], new_solution[(vi_idx+1)%n])
+			time_new_edge_j = self.graph.weight_between(new_solution[vj_idx], new_solution[(vj_idx+1)%n])
+
+			if time_new_edge_i == SimulatedAnnealing.INFINITY or time_new_edge_j == SimulatedAnnealing.INFINITY:
+				time_delta = INFINITY - old_travel_time # należy odjąć czas starego cyklu 
+			else: 
+				# obydwa cykle poprawne - obliczmy różnicę czasów 
+				time_old_edge_i = self.graph.weight_between(new_solution[vi_idx], new_solution[vj_idx])
+				time_old_edge_j = self.graph.weight_between(new_solution[(vi_idx+1)%n], new_solution[(vj_idx+1)%n])
+
+				time_delta = time_new_edge_i + time_new_edge_j - time_old_edge_i - time_old_edge_j
+
+		# możliwe wyniki: 
+		# time_delta == 0, obie prmutacje nie są cyklami, lub czas się nie zmienił 
+		# time_delta << 0, nowa permutacja jest cyklem, a stara nie 
+		# time_delta < 0, obie permutacje są cyklami, nowa ma krótszy czas 
+		# time_delta > 0, obie pertmuacje są cyklami, nowa ma dłuższy czas 
+		# time_delta >> 0, nowa permutacja nie jest cyklem, stara była cyklem
+		return travel_time_delta
+		
 
 	def print_permutation(permutation): 
 		""" Wypisanie permutacji."""
