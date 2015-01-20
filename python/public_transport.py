@@ -153,10 +153,3 @@ class TransportNetwork(graph.Graph):
 			shortest_connection = [ str(conn.start_stop()) + "(" + str(conn.line_number()) + ")" for conn in min_connections_path]
 			shortest_connection.append(str(min_connections_path[-1].end_stop()))
 			return (min_travel_time, shortest_connection)
-
-
-
-
-
-
-

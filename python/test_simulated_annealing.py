@@ -1,4 +1,5 @@
 from graph import *
+from public_transport import *
 from simulated_annealing import *
 import unittest 
 
@@ -22,6 +23,21 @@ class TestSimulatedAnnealing(unittest.TestCase):
 		best_time, cycle = algorithm.optimal_hamiltonian_cycle()
 		print("Otrzymany najkrótszy cykl: "  + cycle)
 		self.assertEqual(best_time, 97)
+
+	def test_simulated_annealing_algorithm_on_public_transport(self): 
+		network = TransportNetwork()
+		network.add_undirected_connection(10, Stop("A"), Stop("B"), 20)
+		network.add_undirected_connection(10, Stop("A"), Stop("C"), 42)
+		network.add_undirected_connection(15, Stop("A"), Stop("D"), 35)
+		network.add_undirected_connection(15, Stop("B"), Stop("C"), 30)
+		network.add_undirected_connection(20, Stop("B"), Stop("D"), 34)
+		network.add_undirected_connection(20, Stop("C"), Stop("D"), 12)
+
+		algorithm = SimulatedAnnealing(network)
+		best_time, cycle = algorithm.optimal_hamiltonian_cycle()
+		print("Otrzymany najkrótszy cykl: "  + cycle)
+		self.assertEqual(best_time, 97)
+
 
 	def tearDown(self): 
 		return 

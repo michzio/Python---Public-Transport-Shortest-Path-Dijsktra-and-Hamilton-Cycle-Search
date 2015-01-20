@@ -13,6 +13,7 @@
 
 import sys
 import public_transport
+import simulated_annealing
 from enum import Enum
 
 class MenuOptions(Enum): 
@@ -41,13 +42,38 @@ def shortest_path_prompt(network):
 		print("Najszybsza trasa:")
 		print("->".join(shortest_connection))
 		print()
-		
+
 	except ValueError: 
 		print("Błąd wczytywania nazw przystanków!\n")
 		return
 
-def hamiltonian_cycle_prompt(network): 
-	pass
+def hamiltonian_cycle_prompt(network):
+
+	selected_stops = []
+
+	try: 
+		no_of_stops = int(input("Podaj liczbe przystanków przez które wyznaczyć min trasę:"))
+
+		for i in range(no_of_stops):
+			next_stop = public_transport.Stop(str(input("Podaj %d początkowy: " % (i+1))).strip())
+			if next_stop not in network.vertices(): 
+				print("Podany przystanek nie istnieje!\n")
+				return 
+			else: 
+				selected_stops.append(next_stop)
+
+		subnetwork = network.get_subnetwork(selected_stops)
+		algorithm = simulated_annealing.SimulatedAnnealing(subnetwork)
+		best_time, cycle = algorithm.optimal_hamiltonian_cycle()
+		if best_time is None: 
+			print("Poszukiwanie cyklu zakończone niepowodzeniem....\n")
+		else: 
+			print("Otrzymany najkrótszy cykl: "  + cycle)
+			print("Otrzymany najkrótszy czas: %s\n"  % best_time)
+
+	except ValueError:
+		print("Błędny input liczba lub nazwa przystanku!")
+		return
 
 # MAIN PROGRAM
 

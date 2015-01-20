@@ -23,20 +23,20 @@ class SimulatedAnnealing:
 
 		best_travel_time, edge_cycle = self.search_min_hamiltionian_cycle()
 
-		if best_travel_time < 0: 
-			return None 
+		if best_travel_time is None or best_travel_time < 0: 
+			return (None, None) 
 
 		printable_cycle = ""
 		# rekonstrukcja optymalnego cyklu 
 		for edge in edge_cycle:
 			printable_cycle += str(edge.source()) 
 			if type(edge) is Connection: 
-				printable_cycle += "(" + edge.line_number() + ")"
+				printable_cycle += "(" + str(edge.line_number()) + ")"
 			printable_cycle += "->"
 		# appending connection from last to first node 
 		printable_cycle += str(edge_cycle[-1].target())
 		if type(edge_cycle[-1]) is Connection: 
-				printable_cycle += "(" + edge_cycle[-1].target().line_number() + ")"
+				printable_cycle += "(" + str(edge_cycle[-1].line_number()) + ")"
 
 		return (best_travel_time, printable_cycle)
 
