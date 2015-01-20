@@ -1,5 +1,6 @@
 #-*-coding:utf-8-*-
 import random
+import math
 
 class SimulatedAnnealing: 
 	""" Klasa implementująca algorytm heurystyczny symulowanego wyrzażania."""
@@ -63,9 +64,9 @@ class SimulatedAnnealing:
 			for i in range(temperature_length): 
 
 				# generowanie nowego rozwiązanie 
-				new_solution, vi, vj = self.generate_new_solution(curr_solution)
+				new_solution, vi_idx, vj_idx = self.generate_new_solution(curr_solution)
 				# obliczenie różnicy czasu pomiędzy starym i nowym rozwiązaniem 
-				time_delta = self.travel_time_change(curr_travel_time, new_solution, vi, vj)
+				time_delta = self.travel_time_change(curr_travel_time, new_solution, vi_idx, vj_idx)
 
 				if time_delta <= 0: 
 					# <0 nowe rozwiązanie ma lepszy czas przejazdu 
@@ -130,24 +131,78 @@ class SimulatedAnnealing:
 		return (best_travel_time, edge_cycle)
 
 	def hamiltonian_cycle_travel_time(self, permutation): 
-		""" Metoda pomocnicza zwracająca czas przejazdu dla danego cyklu."""
-		pass
-		# return travel_time 
+		""" Metoda pomocnicza zwracająca czas przejazdu dla danego cyklu. 
+			Jeżeli dla przekazanej permutacji wierzchołków cykl nie istnieje 
+			(brak którejś z krawędzi) to metoda zwraca INFINITY."""
+
+		travel_time = 0 
+
+		# pętla po kolejnych parach wierzchołków
+		for i in range(len(permutation)): 
+			vi = permutation[i]
+			vj = permutation[(i+1)/len(best_solution)]
+
+			# zapytanie o czas przejazdu między vi - vj
+			edge_travel_time = self.graph.weight_between(vi,vj)
+			# jeżeli INFINITY to brak krawędzi 
+			if edge_travel_time == SimulatedAnnealing.INFINITY:
+				return SimulatedAnnealing.INFINITY
+			travel_time += edge_travel_time
+		
+		return travel_time 
 
 	def generate_new_solution(old_solution):
-		""" Metoda pomocnicza, które generuje nowe rozwiązanie (permutacje) na podstawie starego."""
-		pass
-		# return (new_solution, vi, vj)
+		""" Metoda pomocnicza, które generuje nowe rozwiązanie (permutacje) 
+			na podstawie starego. Algorytm generowania nowej permutacji: 
+			1. Losowe wygenerowanie indeksów vi_idx, vj_idx z przedziału [0, len(permutation))
+			2. Zamiana par wierzchołków (vi, vi+1) oraz (vj, vj+1) tak by otrzymać 
+			   pary (vi, vj) oraz (vi+1, vj+1) 
+			3. Odwrócenie kolejności elementów permutacji (vi+1, ..., vj) -> (vj, ..., vi+1) """
 
-	def travel_time_change(old_travel_time, new_solution, vi, vj): 
+		new_solution = old_solution[:] # przekopiowanie permutacji
+		if len(new_solution) < 4: return new_solution # za mało elementów by wylosować 2 pary
+
+		# 1. losowanie indeksów vi_idx < vj_idx
+		n = len(new_solution)
+		vi_idx = random.randrange(0, n-2)
+		while True: 
+			vj_idx = (random.randrange(0, n-(vi_idx+1)) + (vi_idx+2) ) % n 
+			if vi_idx != vj_idx and vi_idx != ((vj_idx+1)%n):
+				break
+
+		print("Wylosowano pary indeksów (vi, vi+1) = (%d, %d) oraz (vj, vj+1) = (%d,%d)", 
+			vi_idx, (vi_idx+1)%n, vj_idx, (vj_idx+1)%n)
+
+		# 2. zamiana par wierzchołków (vi, vi+1) i (vj, vj+1)
+		#    otrzymując parę (vi, vj) oraz (vi+1, vj+1)
+		#	 czyli swap(vi+1, vj)
+		(new_solution[(vi_idx+1)%n], new_solution[vj_idx]) = (new_solution[vj_idx],new_solution[(vi_idx+1)%n])
+
+		# 3. odwróceie kolejności elementów podlisty (vi+1,...vj) -> (vj, ..., vi+1)
+		new_solution[((vi_idx+1)%n+1):vj_idx] = new_solution[((vi_idx+1)%n+1):vj_idx][::-1]
+
+		print_permutation(old_solution)
+		print_permutation(new_solution)
+
+		return (new_solution, vi_idx, vj_idx)
+
+	def travel_time_change(old_travel_time, new_solution, vi_idx, vj_idx): 
 		""" Metoda pomocincza, która oblicza zmianę czasu przejazdu pomiędzy starym, a nowym rozwiązaniem. """
 		pass
 		# return travel_time_delta
 
 	def print_permutation(permutation): 
 		""" Wypisanie permutacji."""
-		pass
+		print("-".join(permutation)) 
 
 	def probability(time_delta, T): 
-		pass
+		""" Prawdopodobieństwo akceptacji nowej permutacji cyklu. Zależy od:
+			1. różnica czasu przejazdu między nowym i starym cyklem 
+			   im większe wydłużenie czasu to mniejsze prawdopodobieństwo 
+			2. temperatura - im wyższa tym większe prawdopodobieństwo 
+			Zwracana wartość jest w przedziale (0,1] bo exp(negative_x). """
+
+		if time_delta < 0: return 1
+
+		return math.exp(-time_delta/T)
 
